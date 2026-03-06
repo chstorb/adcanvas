@@ -54,7 +54,7 @@
 
 /* END: List-Layout */
 
-/* BEGIN: Multiplex-Leyout */
+/* BEGIN: Multiplex-Layout */
 .stc-multiplex-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -86,7 +86,7 @@
     margin: 0 8px 8px;
 }
 
-/* END: Multiplex-Leyout */
+/* END: Multiplex-Layout */
 
 /* BEGIN: In-Feed-Layout */
 .stc-infeed-card {
@@ -344,3 +344,39 @@
 }
 
 /* END: Premium Theme */
+
+/* BEGIN: Accessibility */
+
+/* Focus states for keyboard navigation */
+.stc-ad-slot a:focus-visible {
+    outline: 2px solid #0066cc;
+    outline-offset: 2px;
+}
+
+.stc-carousel-prev:focus-visible,
+.stc-carousel-next:focus-visible {
+    outline: 2px solid #0066cc;
+    outline-offset: 2px;
+    background: #f0f0f0;
+}
+
+.stc-theme-dark .stc-ad-slot a:focus-visible {
+    outline-color: #66b3ff;
+}
+
+.stc-theme-dark .stc-carousel-prev:focus-visible,
+.stc-theme-dark .stc-carousel-next:focus-visible {
+    outline-color: #66b3ff;
+    background: #444;
+}
+
+.stc-theme-premium .stc-ad-slot a:focus-visible {
+    outline-color: #b4963c;
+}
+
+.stc-theme-premium .stc-carousel-prev:focus-visible,
+.stc-theme-premium .stc-carousel-next:focus-visible {
+    outline-color: #b4963c;
+}
+
+/* END: Accessibility */
