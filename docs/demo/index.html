@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STC Ads Engine – Demo</title>
+
+    <!-- STC Ads Engine (unminified for demo clarity) -->
+    <link rel="stylesheet" href="../dist/stc-ads-engine.css">
+
+    <style>
+        body {
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        header {
+            background: #222;
+            color: #fff;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        h2 {
+            margin-top: 40px;
+            font-size: 1.4rem;
+        }
+
+        h3 {
+            margin-top: 20px;
+        }
+
+        .section {
+            padding: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .demo-block {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+        }
+
+        .code {
+            background: #eee;
+            padding: 10px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <img src="assets/icon.svg" alt="STC Ads Engine Icon" width="64" height="64" style="margin-bottom: 10px;">
+        <h1>STC Ads Engine – Demo</h1>
+        <p>A lightweight, framework‑agnostic ad rendering engine.</p>
+    </header>
+
+    <div class="section">
+
+        <!-- LIST -->
+        <h2>List Layout</h2>
+        <div class="demo-block">
+            <div class="stc-ad-slot" data-layout="list" data-count="3"></div>
+            <div class="code">&lt;div class="stc-ad-slot" data-layout="list" data-count="3"&gt;&lt;/div&gt;</div>
+        </div>
+
+        <!-- MULTIPLEX -->
+        <h2>Multiplex Layout</h2>
+        <div class="demo-block">
+            <div class="stc-ad-slot" data-layout="multiplex" data-count="6"></div>
+            <div class="code">&lt;div class="stc-ad-slot" data-layout="multiplex" data-count="6"&gt;&lt;/div&gt;</div>
+        </div>
+
+        <!-- IN-FEED -->
+        <h2>In‑Feed Layout</h2>
+        <div class="demo-block">
+            <div class="stc-ad-slot" data-layout="infeed" data-count="3"></div>
+            <div class="code">&lt;div class="stc-ad-slot" data-layout="infeed" data-count="3"&gt;&lt;/div&gt;</div>
+        </div>
+
+        <!-- SIDEBAR -->
+        <h2>Sidebar Layout</h2>
+        <div class="demo-block">
+            <div class="stc-ad-slot" data-layout="sidebar" data-count="2"></div>
+            <div class="code">&lt;div class="stc-ad-slot" data-layout="sidebar" data-count="2"&gt;&lt;/div&gt;</div>
+        </div>
+
+        <!-- HERO -->
+        <h2>Hero Layout</h2>
+        <div class="demo-block">
+            <div class="stc-ad-slot" data-layout="hero" data-count="1"></div>
+            <div class="code">&lt;div class="stc-ad-slot" data-layout="hero" data-count="1"&gt;&lt;/div&gt;</div>
+        </div>
+
+        <!-- CAROUSEL -->
+        <h2>Carousel Layout (Autoplay)</h2>
+        <div class="demo-block">
+            <div class="stc-ad-slot" data-layout="carousel" data-count="10" data-autoplay="true" data-interval="3000">
+            </div>
+            <div class="code">&lt;div class="stc-ad-slot" data-layout="carousel" data-count="10" data-autoplay="true"
+                data-interval="3000"&gt;&lt;/div&gt;</div>
+        </div>
+
+        <!-- THEMES -->
+        <h2>Themes</h2>
+
+        <h3>Dark Theme</h3>
+        <div class="demo-block">
+            <div class="stc-ad-slot" data-layout="list" data-theme="dark" data-count="2"></div>
+            <div class="code">&lt;div class="stc-ad-slot" data-layout="list" data-theme="dark"
+                data-count="2"&gt;&lt;/div&gt;</div>
+        </div>
+
+        <h3>Premium Theme</h3>
+        <div class="demo-block">
+            <div class="stc-ad-slot" data-layout="multiplex" data-theme="premium" data-count="4"></div>
+            <div class="code">&lt;div class="stc-ad-slot" data-layout="multiplex" data-theme="premium"
+                data-count="4"&gt;&lt;/div&gt;</div>
+        </div>
+
+    </div>
+
+    <footer style="text-align:center; padding:40px 0; color:#777; font-size:0.9rem;">
+        STC Ads Engine – Open Source Demo<br>
+        <a href="https://chstorb.github.io" style="color:#777; text-decoration:none;">
+            https://chstorb.github.io
+        </a>
+    </footer>
+
+    <!-- STC Ads Engine Script -->
+    <script src="../dist/stc-ads-engine.min.js" defer></script>
+
+</body>
+
+</html>

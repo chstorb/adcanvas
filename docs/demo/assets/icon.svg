@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="80" height="80" viewBox="0 0 80 80"
+     role="img" aria-labelledby="title desc">
+  <title id="title">STC Ads Engine Icon</title>
+  <desc id="desc">
+    3x3 grid of dots with a right-facing arrow in the center,
+    enclosed by curly braces to represent JSON and data flow.
+  </desc>
+
+  <!-- Farben -->
+  <!-- STC Blue: #0066CC, Signal Cyan: #00D4FF -->
+
+  <!-- Linke Klammer { -->
+  <path d="M10,26
+           C14,26 14,18 14,10
+           M14,10 C14,18 22,26 30,26
+           M30,26 C22,26 14,34 14,42
+           M14,42 C14,50 14,58 10,58"
+        fill="none"
+        stroke="#0066CC"
+        stroke-width="3"
+        stroke-linecap="round"/>
+
+  <!-- Rechte Klammer } -->
+  <path d="M70,26
+           C66,26 66,18 66,10
+           M66,10 C66,18 58,26 50,26
+           M50,26 C58,26 66,34 66,42
+           M66,42 C66,50 66,58 70,58"
+        fill="none"
+        stroke="#0066CC"
+        stroke-width="3"
+        stroke-linecap="round"/>
+
+  <!-- 3x3 Grid Punkte -->
+  <g fill="#0066CC">
+    <!-- Reihe 1 -->
+    <circle cx="32" cy="22" r="3"/>
+    <circle cx="40" cy="22" r="3"/>
+    <circle cx="48" cy="22" r="3"/>
+    <!-- Reihe 2 -->
+    <circle cx="32" cy="32" r="3"/>
+    <circle cx="40" cy="32" r="3"/>
+    <circle cx="48" cy="32" r="3"/>
+    <!-- Reihe 3 -->
+    <circle cx="32" cy="42" r="3"/>
+    <circle cx="40" cy="42" r="3"/>
+    <circle cx="48" cy="42" r="3"/>
+  </g>
+
+  <!-- Pfeil nach rechts (Engine/Flow) -->
+  <polygon points="52,28 62,32 52,36"
+           fill="#00D4FF"/>
+</svg>

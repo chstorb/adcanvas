@@ -1,0 +1,101 @@
+name: Auto Version & Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  version-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install tools
+        run: |
+          npm install -g semver terser clean-css-cli
+
+      # -------------------------------------------------------
+      # 1) Version automatisch bestimmen
+      # -------------------------------------------------------
+      - name: Determine next version
+        id: version
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"%s")
+
+          MAJOR=0
+          MINOR=0
+          PATCH=0
+
+          if echo "$COMMITS" | grep -qi "BREAKING CHANGE"; then
+            MAJOR=1
+          elif echo "$COMMITS" | grep -qi "^feat"; then
+            MINOR=1
+          else
+            PATCH=1
+          fi
+
+          NEXT=$(semver -i $( [ $MAJOR -eq 1 ] && echo major || ( [ $MINOR -eq 1 ] && echo minor || echo patch ) ) $LAST_TAG)
+
+          echo "next=$NEXT" >> $GITHUB_OUTPUT
+
+      # -------------------------------------------------------
+      # 2) Build vorbereiten (dist-Ordner erstellen)
+      # -------------------------------------------------------
+      - name: Ensure dist folder exists
+        run: mkdir -p dist
+
+      # -------------------------------------------------------
+      # 3) JS/CSS minifizieren
+      # -------------------------------------------------------
+      - name: Minify JavaScript
+        run: |
+          terser src/js/stc-ads-engine.js \
+            --compress --mangle \
+            --output dist/stc-ads-engine.min.js
+
+      - name: Copy unminified JS
+        run: cp src/js/stc-ads-engine.js dist/stc-ads-engine.js
+
+      - name: Minify CSS
+        run: |
+          cleancss -o dist/stc-ads-engine.min.css src/css/stc-ads-engine.css
+
+      - name: Copy unminified CSS
+        run: cp src/css/stc-ads-engine.css dist/stc-ads-engine.css
+
+      # -------------------------------------------------------
+      # 4) Git-Tag erstellen
+      # -------------------------------------------------------
+      - name: Create Git Tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git tag ${{ steps.version.outputs.next }}
+          git push origin ${{ steps.version.outputs.next }}
+
+      # -------------------------------------------------------
+      # 5) Release erzeugen
+      # -------------------------------------------------------
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.next }}
+          name: Release ${{ steps.version.outputs.next }}
+          files: |
+            dist/stc-ads-engine.js
+            dist/stc-ads-engine.min.js
+            dist/stc-ads-engine.css
+            dist/stc-ads-engine.min.css
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
