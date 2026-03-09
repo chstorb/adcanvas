@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg"
      width="1200" height="260" viewBox="0 0 1200 260"
      role="img" aria-labelledby="title desc">
-  <title id="title">STC Ads Engine – README Banner</title>
+  <title id="title">AdCanvas – README Banner</title>
   <desc id="desc">
-    Banner with icon-only logo, product name, and tagline for the STC Ads Engine project.
+    Banner with icon-only logo, product name, and tagline for the AdCanvas project.
   </desc>
 
   <!-- Hintergrund -->
@@ -58,7 +58,7 @@
         font-size="48"
         fill="#1A1A1A"
         font-weight="700">
-    STC Ads Engine
+    AdCanvas
   </text>
 
   <text x="260" y="170"

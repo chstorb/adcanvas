@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg"
      width="320" height="80" viewBox="0 0 320 80"
      role="img" aria-labelledby="title desc">
-  <title id="title">STC Ads Engine Logo</title>
+  <title id="title">AdCanvas Logo</title>
   <desc id="desc">
     Icon with a 3x3 grid of dots, a right arrow in the center, wrapped in curly braces,
-    followed by the text STC Ads Engine.
+    followed by the text AdCanvas.
   </desc>
 
   <!-- Farben -->
-  <!-- STC Blue: #0066CC, Engine Black: #1A1A1A, Signal Cyan: #00D4FF -->
+  <!-- AdCanvas Blue: #0066CC, Engine Black: #1A1A1A, Signal Cyan: #00D4FF -->
 
   <!-- Icon-Gruppe -->
   <g transform="translate(20, 16)">
@@ -63,7 +63,7 @@
         font-family="Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
         font-size="18"
         fill="#1A1A1A">
-    <tspan font-weight="700">STC</tspan>
+    <tspan font-weight="700">AdCanvas</tspan>
     <tspan dx="6" font-weight="400">Ads Engine</tspan>
   </text>
 </svg>

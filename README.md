@@ -1,15 +1,15 @@
-# STC Ads Engine
+# AdCanvas
 
-[![Latest Release](https://img.shields.io/github/v/release/chstorb/stc-ads-engine?label=Latest&style=flat-square)](https://github.com/chstorb/stc-ads-engine/releases/latest)
-[![jsDelivr hits (GitHub)](https://img.shields.io/jsdelivr/gh/hy/chstorb/stc-ads-engine?style=flat-square)](https://www.jsdelivr.com/package/gh/chstorb/stc-ads-engine)
+[![Latest Release](https://img.shields.io/github/v/release/chstorb/adcanvas?label=Latest&style=flat-square)](https://github.com/chstorb/adcanvas/releases/latest)
+[![jsDelivr hits (GitHub)](https://img.shields.io/jsdelivr/gh/hy/chstorb/adcanvas?style=flat-square)](https://www.jsdelivr.com/package/gh/chstorb/adcanvas)
 [![MIT License](https://img.shields.io/badge/license-MIT-green?style=flat-square)](LICENSE)
-[![Build Status](https://img.shields.io/github/actions/workflow/status/chstorb/stc-ads-engine/auto-release.yml?branch=main&style=flat-square)](https://github.com/chstorb/stc-ads-engine/actions)
-[![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)](https://github.com/chstorb/stc-ads-engine)
-[![Engine](https://img.shields.io/badge/engine-javascript-yellow?style=flat-square)](src/js/stc-ads-engine.js)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/chstorb/adcanvas/auto-release.yml?branch=main&style=flat-square)](https://github.com/chstorb/adcanvas/actions)
+[![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)](https://github.com/chstorb/adcanvas)
+[![Engine](https://img.shields.io/badge/engine-javascript-yellow?style=flat-square)](src/js/adcanvas.js)
 
 A lightweight, zero-dependency ad display engine for modern web applications. Renders customizable ads with multiple layout options, theme support, and automatic fallback mechanisms.
 
-**[📍 Live Demo](https://chstorb.github.io/stc-ads-engine/docs/demo/)** | **[🔗 Repository](https://github.com/chstorb/stc-ads-engine)** | **[📄 License](LICENSE)**
+**[📍 Live Demo](https://chstorb.github.io/adcanvas/docs/demo/)** | **[🔗 Repository](https://github.com/chstorb/adcanvas)** | **[📄 License](LICENSE)**
 
 ## 🚀 Features
 
@@ -31,10 +31,10 @@ Add to your HTML `<head>` section:
 
 ```html
 <!-- CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/chstorb/stc-ads-engine@latest/dist/stc-ads-engine.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/chstorb/adcanvas@latest/dist/adcanvas.min.css">
 
 <!-- JavaScript -->
-<script src="https://cdn.jsdelivr.net/gh/chstorb/stc-ads-engine@latest/dist/stc-ads-engine.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/chstorb/adcanvas@latest/dist/adcanvas.min.js" defer></script>
 ```
 
 ### Local / Self-Hosted
@@ -42,25 +42,25 @@ Add to your HTML `<head>` section:
 1. Download or clone the repository:
 
 ```bash
-git clone https://github.com/chstorb/stc-ads-engine.git
-cd stc-ads-engine
+git clone https://github.com/chstorb/adcanvas.git
+cd adcanvas
 ```
 
 2. Copy files to your project:
 
 ```bash
-cp src/js/stc-ads-engine.js your-project/
-cp src/css/stc-ads-engine.css your-project/
+cp src/js/adcanvas.js your-project/
+cp src/css/adcanvas.css your-project/
 # Or use minified versions from dist/
-cp dist/stc-ads-engine.min.js your-project/
-cp dist/stc-ads-engine.min.css your-project/
+cp dist/adcanvas.min.js your-project/
+cp dist/adcanvas.min.css your-project/
 ```
 
 3. Include in your HTML:
 
 ```html
-<link rel="stylesheet" href="/path/to/stc-ads-engine.min.css">
-<script src="/path/to/stc-ads-engine.min.js" defer></script>
+<link rel="stylesheet" href="/path/to/adcanvas.min.css">
+<script src="/path/to/adcanvas.min.js" defer></script>
 ```
 
 ### TypeScript Support
@@ -68,10 +68,10 @@ cp dist/stc-ads-engine.min.css your-project/
 If you're using TypeScript, type definitions are available:
 
 ```typescript
-import type { StcAd, StcAdSlot } from 'stc-ads-engine';
+import type { AdCanvasAd, AdCanvasAdSlot } from 'adcanvas';
 ```
 
-See [dist/stc-ads-engine.d.ts](dist/stc-ads-engine.d.ts) for full type definitions.
+See [dist/adcanvas.d.ts](dist/adcanvas.d.ts) for full type definitions.
 
 ## 🎯 Quick Start
 
@@ -80,7 +80,7 @@ See [dist/stc-ads-engine.d.ts](dist/stc-ads-engine.d.ts) for full type definitio
 Add a simple ad slot to your HTML:
 
 ```html
-<div class="stc-ad-slot"></div>
+<div class="adcanvas-ad-slot"></div>
 ```
 
 The engine automatically initializes on page load and displays 3 random ads in list layout.
@@ -91,20 +91,20 @@ Control layout, count, and theme:
 
 ```html
 <!-- Multiplex grid layout, 6 ads, dark theme -->
-<div class="stc-ad-slot" 
+<div class="adcanvas-ad-slot" 
      data-layout="multiplex" 
      data-count="6" 
      data-theme="dark"></div>
 
 <!-- Carousel with autoplay -->
-<div class="stc-ad-slot" 
+<div class="adcanvas-ad-slot" 
      data-layout="carousel" 
      data-count="10" 
      data-autoplay="true" 
      data-interval="4000"></div>
 
 <!-- Premium hero layout -->
-<div class="stc-ad-slot" 
+<div class="adcanvas-ad-slot" 
      data-layout="hero" 
      data-count="1" 
      data-theme="premium"></div>
@@ -131,21 +131,21 @@ Choose how your ads are displayed:
 Vertical stack of cards, each with image, title, and price. Best for sidebars and simple feeds.
 
 ```html
-<div class="stc-ad-slot" data-layout="list" data-count="3"></div>
+<div class="adcanvas-ad-slot" data-layout="list" data-count="3"></div>
 ```
 
 #### Multiplex Layout
 CSS Grid that adapts column count based on available space. Responsive and mobile-friendly.
 
 ```html
-<div class="stc-ad-slot" data-layout="multiplex" data-count="8"></div>
+<div class="adcanvas-ad-slot" data-layout="multiplex" data-count="8"></div>
 ```
 
 #### Carousel Layout
 Horizontal scrollable carousel with prev/next buttons and optional auto-play. Touch-swipe enabled.
 
 ```html
-<div class="stc-ad-slot" 
+<div class="adcanvas-ad-slot" 
      data-layout="carousel" 
      data-count="10" 
      data-autoplay="true" 
@@ -164,18 +164,18 @@ Apply color schemes via the `data-theme` attribute:
 
 ```html
 <!-- Light theme (default) -->
-<div class="stc-ad-slot" data-theme="light"></div>
+<div class="adcanvas-ad-slot" data-theme="light"></div>
 
 <!-- Dark theme -->
-<div class="stc-ad-slot" data-theme="dark"></div>
+<div class="adcanvas-ad-slot" data-theme="dark"></div>
 
 <!-- Premium theme -->
-<div class="stc-ad-slot" data-theme="premium"></div>
+<div class="adcanvas-ad-slot" data-theme="premium"></div>
 ```
 
 ## ⚙️ API Reference
 
-### HTML Attributes on `.stc-ad-slot`
+### HTML Attributes on `.adcanvas-ad-slot`
 
 | Attribute | Type | Default | Required | Description |
 |-----------|------|---------|----------|-------------|
@@ -247,7 +247,7 @@ Enable detailed logging:
 
 ```html
 <script>
-window.STCAdsConfig = { enableDebug: true };
+window.AdCanvasConfig = { enableDebug: true };
 </script>
 ```
 
@@ -259,12 +259,12 @@ You can override the default feed URL before loading the script:
 
 ```html
 <script>
-window.STCAdsConfig = {
+window.AdCanvasConfig = {
   feedUrl: "https://your-server.com/ads.json",
   enableDebug: false  // Set to true for detailed console logs
 };
 </script>
-<script src="https://cdn.jsdelivr.net/gh/chstorb/stc-ads-engine@latest/dist/stc-ads-engine.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/gh/chstorb/adcanvas@latest/dist/adcanvas.min.js" defer></script>
 ```
 
 ### JavaScript API
@@ -274,7 +274,7 @@ The engine auto-initializes on `DOMContentLoaded`. No manual API calls are neede
 If you need to manually initialize (e.g., for dynamically loaded HTML):
 
 ```javascript
-// After adding new .stc-ad-slot elements to DOM
+// After adding new .adcanvas-ad-slot elements to DOM
 // The engine will auto-init on the next DOMContentLoaded cycle
 // Or refresh the page to trigger initialization
 ```
@@ -313,21 +313,21 @@ If you need to manually initialize (e.g., for dynamically loaded HTML):
 1. **Clone the repository:**
 
 ```bash
-git clone https://github.com/chstorb/stc-ads-engine.git
-cd stc-ads-engine
+git clone https://github.com/chstorb/adcanvas.git
+cd adcanvas
 ```
 
 2. **File Structure:**
 
 ```
 src/
-  js/stc-ads-engine.js           # Unminified source
-  css/stc-ads-engine.css         # Unminified styles
+  js/adcanvas.js           # Unminified source
+  css/adcanvas.css         # Unminified styles
 dist/
-  stc-ads-engine.js              # Copy of source
-  stc-ads-engine.min.js          # Minified
-  stc-ads-engine.css             # Copy of source
-  stc-ads-engine.min.css         # Minified
+  adcanvas.js              # Copy of source
+  adcanvas.min.js          # Minified
+  adcanvas.css             # Copy of source
+  adcanvas.min.css         # Minified
 docs/demo/
   index.html                     # Live demo page
 README.md                        # This file
@@ -345,14 +345,14 @@ To manually build:
 npm install -g terser clean-css-cli
 
 # Minify JavaScript
-terser src/js/stc-ads-engine.js --compress --mangle --output dist/stc-ads-engine.min.js --source-map "url=stc-ads-engine.min.js.map"
+terser src/js/adcanvas.js --compress --mangle --output dist/adcanvas.min.js --source-map "url=adcanvas.min.js.map"
 
 # Minify CSS
-cleancss --source-map -o dist/stc-ads-engine.min.css src/css/stc-ads-engine.css
+cleancss --source-map -o dist/adcanvas.min.css src/css/adcanvas.css
 
 # Copy unminified
-cp src/js/stc-ads-engine.js dist/stc-ads-engine.js
-cp src/css/stc-ads-engine.css dist/stc-ads-engine.css
+cp src/js/adcanvas.js dist/adcanvas.js
+cp src/css/adcanvas.css dist/adcanvas.css
 ```
 
 4. **Test Demo Locally:**
@@ -368,7 +368,7 @@ python3 -m http.server 8000
 
 5. **Modify & Test:**
 
-Edit `src/js/stc-ads-engine.js` or `src/css/stc-ads-engine.css`, run build, then test demo.
+Edit `src/js/adcanvas.js` or `src/css/adcanvas.css`, run build, then test demo.
 
 6. **Publish:**
 
@@ -419,9 +419,9 @@ Copyright © 2026 Christian Storb
 
 ## 🤝 Support
 
-- **Issues:** [GitHub Issues](https://github.com/chstorb/stc-ads-engine/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/chstorb/stc-ads-engine/discussions)
-- **Demo:** [Live Demo](https://chstorb.github.io/products/stc-ads-engine/docs/demo/)
+- **Issues:** [GitHub Issues](https://github.com/chstorb/adcanvas/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/chstorb/adcanvas/discussions)
+- **Demo:** [Live Demo](https://chstorb.github.io/products/adcanvas/docs/demo/)
 
 ---
 

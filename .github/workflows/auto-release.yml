@@ -60,19 +60,19 @@ jobs:
       # -------------------------------------------------------
       - name: Minify JavaScript
         run: |
-          terser src/js/stc-ads-engine.js \
+          terser src/js/adcanvas.js \
             --compress --mangle \
-            --output dist/stc-ads-engine.min.js
+            --output dist/adcanvas.min.js
 
       - name: Copy unminified JS
-        run: cp src/js/stc-ads-engine.js dist/stc-ads-engine.js
+        run: cp src/js/adcanvas.js dist/adcanvas.js
 
       - name: Minify CSS
         run: |
-          cleancss -o dist/stc-ads-engine.min.css src/css/stc-ads-engine.css
+          cleancss -o dist/adcanvas.min.css src/css/adcanvas.css
 
       - name: Copy unminified CSS
-        run: cp src/css/stc-ads-engine.css dist/stc-ads-engine.css
+        run: cp src/css/adcanvas.css dist/adcanvas.css
 
       # -------------------------------------------------------
       # 4) Git-Tag erstellen
@@ -93,9 +93,9 @@ jobs:
           tag_name: ${{ steps.version.outputs.next }}
           name: Release ${{ steps.version.outputs.next }}
           files: |
-            dist/stc-ads-engine.js
-            dist/stc-ads-engine.min.js
-            dist/stc-ads-engine.css
-            dist/stc-ads-engine.min.css
+            dist/adcanvas.js
+            dist/adcanvas.min.js
+            dist/adcanvas.css
+            dist/adcanvas.min.css
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg"
      width="80" height="80" viewBox="0 0 80 80"
      role="img" aria-labelledby="title desc">
-  <title id="title">STC Ads Engine Icon</title>
+  <title id="title">AdCanvas Icon</title>
   <desc id="desc">
     3x3 grid of dots with a right-facing arrow in the center,
     enclosed by curly braces to represent JSON and data flow.
   </desc>
 
   <!-- Farben -->
-  <!-- STC Blue: #0066CC, Signal Cyan: #00D4FF -->
+  <!-- AdCanvas Blue: #0066CC, Signal Cyan: #00D4FF -->
 
   <!-- Linke Klammer { -->
   <path d="M10,26

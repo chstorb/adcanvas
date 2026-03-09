@@ -1,8 +1,8 @@
 /*!
- * STC Ads Engine
+ * AdCanvas
  * Lightweight, framework‑agnostic ad rendering engine.
  * https://chstorb.github.io
- * https://github.com/chstorb/stc-ads-engine
+ * https://github.com/chstorb/adcanvas
  *
  * Author: Christian Storb
  * License: MIT
@@ -14,20 +14,20 @@
     // -------- GLOBAL CONFIGURATION (can be overridden before script load) --------
     // Allow users to set custom configuration before the script loads:
     // <script>
-    //   window.STCAdsConfig = { feedUrl: "https://your-api.com/ads.json" };
+    //   window.AdCanvasConfig = { feedUrl: "https://your-api.com/ads.json" };
     // </script>
-    window.STCAdsConfig = window.STCAdsConfig || {};
+    window.AdCanvasConfig = window.AdCanvasConfig || {};
 
     // -------- CONFIGURATION --------
     const CONFIG = {
-        // Feed URL - can be overridden via window.STCAdsConfig.feedUrl
-        feedUrl: window.STCAdsConfig.feedUrl || "https://chstorb.github.io/data.json",
+        // Feed URL - can be overridden via window.AdCanvasConfig.feedUrl
+        feedUrl: window.AdCanvasConfig.feedUrl || "https://chstorb.github.io/data.json",
         
-        // Debug mode - enable detailed logging via window.STCAdsConfig.enableDebug
-        enableDebug: window.STCAdsConfig.enableDebug || false,
+        // Debug mode - enable detailed logging via window.AdCanvasConfig.enableDebug
+        enableDebug: window.AdCanvasConfig.enableDebug || false,
         
         // Carousel item width = minWidth (200px) + margin-right (12px)
-        // MUST match CSS: .stc-carousel-item { min-width: 200px; margin-right: 12px; }
+        // MUST match CSS: .adcanvas-carousel-item { min-width: 200px; margin-right: 12px; }
         CAROUSEL_ITEM_WIDTH: 212,
         CAROUSEL_ITEM_MIN_WIDTH: 200,
         CAROUSEL_ITEM_MARGIN: 12,
@@ -90,7 +90,7 @@
         
         try {
             if (CONFIG.enableDebug) {
-                console.debug("STC Ads: Fetching from " + feedUrl);
+                console.debug("AdCanvas: Fetching from " + feedUrl);
             }
             const response = await fetch(feedUrl, { cache: "no-store" });
             
@@ -100,13 +100,13 @@
             
             const data = await response.json();
             if (CONFIG.enableDebug) {
-                console.log("STC Ads: Feed loaded successfully, " + data.length + " items");
+                console.log("AdCanvas: Feed loaded successfully, " + data.length + " items");
             }
             return data;
             
         } catch (error) {
             console.warn(
-                "STC Ads: Failed to load feed from " + feedUrl + "\n" +
+                "AdCanvas: Failed to load feed from " + feedUrl + "\n" +
                 "Error: " + error.message + "\n" +
                 "Using fallback data. Check network tab and CORS settings.",
                 error
@@ -408,12 +408,12 @@
      * @returns {void}
      * 
      * @example
-     * applyTheme(document.querySelector('.stc-ad-slot'));
-     * // Applies stc-theme-light class
+     * applyTheme(document.querySelector('.adcanvas-ad-slot'));
+     * // Applies adcanvas-theme-light class
      */
     function applyTheme(slot) {
         const theme = slot.dataset.theme || "light";
-        slot.classList.add("stc-theme-" + theme);
+        slot.classList.add("adcanvas-theme-" + theme);
     }
 
     // ----------------------------------------------------
@@ -439,14 +439,14 @@
          */
         list(slot, ads) {
             slot.innerHTML = ads.map(ad => `
-                <div class="stc-ad-card">
+                <div class="adcanvas-ad-card">
                     <a href="${sanitize(ad.awDeepLink)}" target="_blank">
                         <img src="${sanitize(ad.merchantImageUrl)}"
                              alt="${sanitize(ad.productName)}"
                              loading="lazy"
                              decoding="async">
-                        <div class="stc-ad-title">${sanitize(ad.productName)}</div>
-                        <div class="stc-ad-price">${sanitize(ad.displayPrice)}</div>
+                        <div class="adcanvas-ad-title">${sanitize(ad.productName)}</div>
+                        <div class="adcanvas-ad-price">${sanitize(ad.displayPrice)}</div>
                     </a>
                 </div>
             `).join("");
@@ -471,16 +471,16 @@
          */
         multiplex(slot, ads) {
             slot.innerHTML = `
-                <div class="stc-multiplex-grid">
+                <div class="adcanvas-multiplex-grid">
                     ${ads.map(ad => `
-                        <div class="stc-multiplex-item">
+                        <div class="adcanvas-multiplex-item">
                             <a href="${sanitize(ad.awDeepLink)}" target="_blank">
                                 <img src="${sanitize(ad.merchantImageUrl)}"
                                      alt="${sanitize(ad.productName)}"
                                      loading="lazy"
                                      decoding="async">
-                                <div class="stc-multiplex-title">${sanitize(ad.productName)}</div>
-                                <div class="stc-multiplex-price">${sanitize(ad.displayPrice)}</div>
+                                <div class="adcanvas-multiplex-title">${sanitize(ad.productName)}</div>
+                                <div class="adcanvas-multiplex-price">${sanitize(ad.displayPrice)}</div>
                             </a>
                         </div>
                     `).join("")}
@@ -507,17 +507,17 @@
          */
         infeed(slot, ads) {
             slot.innerHTML = ads.map(ad => `
-                <div class="stc-infeed-card">
-                    <a href="${sanitize(ad.awDeepLink)}" target="_blank" class="stc-infeed-link">
-                        <div class="stc-infeed-image-wrapper">
+                <div class="adcanvas-infeed-card">
+                    <a href="${sanitize(ad.awDeepLink)}" target="_blank" class="adcanvas-infeed-link">
+                        <div class="adcanvas-infeed-image-wrapper">
                             <img src="${sanitize(ad.merchantImageUrl)}"
                                  alt="${sanitize(ad.productName)}"
                                  loading="lazy"
                                  decoding="async">
                         </div>
-                        <div class="stc-infeed-content">
-                            <div class="stc-infeed-title">${sanitize(ad.productName)}</div>
-                            <div class="stc-infeed-price">${sanitize(ad.displayPrice)}</div>
+                        <div class="adcanvas-infeed-content">
+                            <div class="adcanvas-infeed-title">${sanitize(ad.productName)}</div>
+                            <div class="adcanvas-infeed-price">${sanitize(ad.displayPrice)}</div>
                         </div>
                     </a>
                 </div>
@@ -543,16 +543,16 @@
          */
         sidebar(slot, ads) {
             slot.innerHTML = ads.map(ad => `
-                <div class="stc-sidebar-card">
+                <div class="adcanvas-sidebar-card">
                     <a href="${sanitize(ad.awDeepLink)}" target="_blank">
-                        <div class="stc-sidebar-image-wrapper">
+                        <div class="adcanvas-sidebar-image-wrapper">
                             <img src="${sanitize(ad.merchantImageUrl)}"
                                  alt="${sanitize(ad.productName)}"
                                  loading="lazy"
                                  decoding="async">
                         </div>
-                        <div class="stc-sidebar-title">${sanitize(ad.productName)}</div>
-                        <div class="stc-sidebar-price">${sanitize(ad.displayPrice)}</div>
+                        <div class="adcanvas-sidebar-title">${sanitize(ad.productName)}</div>
+                        <div class="adcanvas-sidebar-price">${sanitize(ad.displayPrice)}</div>
                     </a>
                 </div>
             `).join("");
@@ -577,17 +577,17 @@
          */
         hero(slot, ads) {
             slot.innerHTML = ads.map(ad => `
-                <div class="stc-hero-card">
-                    <a href="${sanitize(ad.awDeepLink)}" target="_blank" class="stc-hero-link">
-                        <div class="stc-hero-image-wrapper">
+                <div class="adcanvas-hero-card">
+                    <a href="${sanitize(ad.awDeepLink)}" target="_blank" class="adcanvas-hero-link">
+                        <div class="adcanvas-hero-image-wrapper">
                             <img src="${sanitize(ad.merchantImageUrl)}"
                                  alt="${sanitize(ad.productName)}"
                                  loading="lazy"
                                  decoding="async">
                         </div>
-                        <div class="stc-hero-content">
-                            <div class="stc-hero-title">${sanitize(ad.productName)}</div>
-                            <div class="stc-hero-price">${sanitize(ad.displayPrice)}</div>
+                        <div class="adcanvas-hero-content">
+                            <div class="adcanvas-hero-title">${sanitize(ad.productName)}</div>
+                            <div class="adcanvas-hero-price">${sanitize(ad.displayPrice)}</div>
                         </div>
                     </a>
                 </div>
@@ -615,11 +615,11 @@
             const doubled = ads.concat(ads);
 
             slot.innerHTML = `
-                <div class="stc-carousel" role="region" aria-label="Product carousel">
-                    <button class="stc-carousel-prev" aria-label="Previous product">&#10094;</button>
-                    <div class="stc-carousel-track" role="group">
+                <div class="adcanvas-carousel" role="region" aria-label="Product carousel">
+                    <button class="adcanvas-carousel-prev" aria-label="Previous product">&#10094;</button>
+                    <div class="adcanvas-carousel-track" role="group">
                         ${doubled.map(ad => `
-                            <div class="stc-carousel-item" role="article">
+                            <div class="adcanvas-carousel-item" role="article">
                                 <a href="${sanitize(ad.awDeepLink)}" 
                                    target="_blank"
                                    aria-label="${sanitize(ad.productName)} - ${sanitize(ad.displayPrice)}">
@@ -627,25 +627,25 @@
                                          alt="${sanitize(ad.productName)}"
                                          loading="lazy"
                                          decoding="async">
-                                    <div class="stc-carousel-title">${sanitize(ad.productName)}</div>
-                                    <div class="stc-carousel-price">${sanitize(ad.displayPrice)}</div>
+                                    <div class="adcanvas-carousel-title">${sanitize(ad.productName)}</div>
+                                    <div class="adcanvas-carousel-price">${sanitize(ad.displayPrice)}</div>
                                 </a>
                             </div>
                         `).join("")}
                     </div>
-                    <button class="stc-carousel-next" aria-label="Next product">&#10095;</button>
+                    <button class="adcanvas-carousel-next" aria-label="Next product">&#10095;</button>
                 </div>
             `;
 
-            const track = slot.querySelector(".stc-carousel-track");
-            const prev = slot.querySelector(".stc-carousel-prev");
-            const next = slot.querySelector(".stc-carousel-next");
+            const track = slot.querySelector(".adcanvas-carousel-track");
+            const prev = slot.querySelector(".adcanvas-carousel-prev");
+            const next = slot.querySelector(".adcanvas-carousel-next");
 
             // Validate required DOM elements
             if (!track || !prev || !next) {
                 console.error(
-                    "STC Ads Carousel: Missing required DOM elements. " +
-                    "Check HTML structure: .stc-carousel-track, .stc-carousel-prev, .stc-carousel-next"
+                    "AdCanvas Carousel: Missing required DOM elements. " +
+                    "Check HTML structure: .adcanvas-carousel-track, .adcanvas-carousel-prev, .adcanvas-carousel-next"
                 );
                 return;
             }
@@ -743,11 +743,11 @@
     // 4. Initialization
     // ----------------------------------------------------
     /**
-     * Initializes STC Ads Engine.
+     * Initializes AdCanvas.
      * 
      * Waits for DOM ready, then:
      * 1. Loads ad feed data
-     * 2. Finds all .stc-ad-slot elements
+     * 2. Finds all .adcanvas-ad-slot elements
      * 3. Applies themes
      * 4. Renders appropriate layout for each slot
      * 
@@ -765,19 +765,19 @@
         
         // Validate data structure
         if (!ads || !Array.isArray(ads)) {
-            console.warn('STC Ads: Invalid data structure');
+            console.warn('AdCanvas: Invalid data structure');
             return;
         }
 
         // Filter invalid ads
         const validAds = ads.filter(ad => validateAd(ad));
         if (validAds.length === 0) {
-            console.warn('STC Ads: No valid ads found');
+            console.warn('AdCanvas: No valid ads found');
             return;
         }
 
         // Apply themes and render layouts
-        const slots = document.querySelectorAll(".stc-ad-slot");
+        const slots = document.querySelectorAll(".adcanvas-ad-slot");
         if (!slots.length) return;
 
         slots.forEach(function (slot) {
@@ -795,7 +795,7 @@
             if (layouts[layout]) {
                 layouts[layout](slot, selected);
             } else {
-                console.warn("STC Ads: Unknown layout:", layout);
+                console.warn("AdCanvas: Unknown layout:", layout);
             }
         });
     }
