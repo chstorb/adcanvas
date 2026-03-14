@@ -182,6 +182,7 @@ Apply color schemes via the `data-theme` attribute:
 | `data-layout` | string | "list" | No | Layout type: list, multiplex, infeed, sidebar, hero, carousel |
 | `data-count` | number | 3 | No | Number of ads to display (random selection from feed) |
 | `data-theme` | string | "light" | No | Theme: light, dark, premium |
+| `data-label` | string | "Werbung" | No | Label text displayed above the ad slot ("Anzeige", "Werbung", etc.) |
 | `data-autoplay` | boolean | false | No | Enable carousel autoplay |
 | `data-interval` | number | 4000 | No | Autoplay interval in milliseconds |
 

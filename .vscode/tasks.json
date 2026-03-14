@@ -13,8 +13,37 @@
     },
     {
       "label": "build-all",
-      "dependsOn": ["build-js", "build-css"],
+      "dependsOn": [
+        "build-js",
+        "build-css"
+      ],
       "group": "build"
+    },
+    {
+      "label": "serve-demo",
+      "type": "shell",
+      "command": "npx -y serve .",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": [
+          {
+            "regexp": ".*"
+          }
+        ],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Accepting connections",
+          "endsPattern": "Accepting connections"
+        }
+      }
+    },
+    {
+      "label": "build-and-serve",
+      "dependsOn": [
+        "build-all",
+        "serve-demo"
+      ],
+      "dependsOrder": "sequence"
     }
   ]
 }

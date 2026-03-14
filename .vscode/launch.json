@@ -3,10 +3,10 @@
   "configurations": [
     {
       "name": "Build + Open Demo in Integrated Browser",
-      "type": "vscode-edge-devtools.debug",
+      "type": "chrome",
       "request": "launch",
-      "url": "${workspaceFolder}/docs/demo/index.html",
-      "preLaunchTask": "build-all"
+      "url": "http://localhost:3000/index.html",
+      "preLaunchTask": "build-and-serve"
     }
   ]
 }

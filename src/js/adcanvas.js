@@ -459,19 +459,23 @@
          * // Renders vertical card list
          */
         list(slot, ads) {
+            const labelText = slot.dataset.label || "Werbung";
             slot.textContent = '';
-            slot.insertAdjacentHTML('beforeend', ads.map(ad => `
-                <div class="adcanvas-ad-card">
-                    <a href="${sanitize(ad.awDeepLink)}" target="_blank">
-                        <img src="${sanitize(ad.merchantImageUrl)}"
-                             alt="${sanitize(ad.productName)}"
-                             loading="lazy"
-                             decoding="async">
-                        <div class="adcanvas-ad-title">${sanitize(ad.productName)}</div>
-                        <div class="adcanvas-ad-price">${sanitize(ad.displayPrice)}</div>
-                    </a>
-                </div>
-            `).join(""));
+            slot.insertAdjacentHTML('beforeend', `
+                <div class="adcanvas-ad-label">${sanitize(labelText)}</div>
+                ${ads.map(ad => `
+                    <div class="adcanvas-ad-card">
+                        <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank">
+                            <img src="${sanitize(ad.merchantImageUrl)}"
+                                 alt="${sanitize(ad.productName)}"
+                                 loading="lazy"
+                                 decoding="async">
+                            <div class="adcanvas-ad-title">${sanitize(ad.productName)}</div>
+                            <div class="adcanvas-ad-price">${sanitize(ad.displayPrice)}</div>
+                        </a>
+                    </div>
+                `).join("")}
+            `);
         },
 
         // -------------------------
@@ -492,12 +496,14 @@
          * // Renders responsive grid layout
          */
         multiplex(slot, ads) {
+            const labelText = slot.dataset.label || "Werbung";
             slot.textContent = '';
             slot.insertAdjacentHTML('beforeend', `
+                <div class="adcanvas-ad-label">${sanitize(labelText)}</div>
                 <div class="adcanvas-multiplex-grid">
                     ${ads.map(ad => `
                         <div class="adcanvas-multiplex-item">
-                            <a href="${sanitize(ad.awDeepLink)}" target="_blank">
+                            <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank">
                                 <img src="${sanitize(ad.merchantImageUrl)}"
                                      alt="${sanitize(ad.productName)}"
                                      loading="lazy"
@@ -529,23 +535,27 @@
          * // Renders horizontal card layout
          */
         infeed(slot, ads) {
+            const labelText = slot.dataset.label || "Werbung";
             slot.textContent = '';
-            slot.insertAdjacentHTML('beforeend', ads.map(ad => `
-                <div class="adcanvas-infeed-card">
-                    <a href="${sanitize(ad.awDeepLink)}" target="_blank" class="adcanvas-infeed-link">
-                        <div class="adcanvas-infeed-image-wrapper">
-                            <img src="${sanitize(ad.merchantImageUrl)}"
-                                 alt="${sanitize(ad.productName)}"
-                                 loading="lazy"
-                                 decoding="async">
-                        </div>
-                        <div class="adcanvas-infeed-content">
-                            <div class="adcanvas-infeed-title">${sanitize(ad.productName)}</div>
-                            <div class="adcanvas-infeed-price">${sanitize(ad.displayPrice)}</div>
-                        </div>
-                    </a>
-                </div>
-            `).join(""));
+            slot.insertAdjacentHTML('beforeend', `
+                <div class="adcanvas-ad-label">${sanitize(labelText)}</div>
+                ${ads.map(ad => `
+                    <div class="adcanvas-infeed-card">
+                        <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank" class="adcanvas-infeed-link">
+                            <div class="adcanvas-infeed-image-wrapper">
+                                <img src="${sanitize(ad.merchantImageUrl)}"
+                                     alt="${sanitize(ad.productName)}"
+                                     loading="lazy"
+                                     decoding="async">
+                            </div>
+                            <div class="adcanvas-infeed-content">
+                                <div class="adcanvas-infeed-title">${sanitize(ad.productName)}</div>
+                                <div class="adcanvas-infeed-price">${sanitize(ad.displayPrice)}</div>
+                            </div>
+                        </a>
+                    </div>
+                `).join("")}
+            `);
         },
 
         // -------------------------
@@ -566,21 +576,25 @@
          * // Renders centered sidebar card layout
          */
         sidebar(slot, ads) {
+            const labelText = slot.dataset.label || "Werbung";
             slot.textContent = '';
-            slot.insertAdjacentHTML('beforeend', ads.map(ad => `
-                <div class="adcanvas-sidebar-card">
-                    <a href="${sanitize(ad.awDeepLink)}" target="_blank">
-                        <div class="adcanvas-sidebar-image-wrapper">
-                            <img src="${sanitize(ad.merchantImageUrl)}"
-                                 alt="${sanitize(ad.productName)}"
-                                 loading="lazy"
-                                 decoding="async">
-                        </div>
-                        <div class="adcanvas-sidebar-title">${sanitize(ad.productName)}</div>
-                        <div class="adcanvas-sidebar-price">${sanitize(ad.displayPrice)}</div>
-                    </a>
-                </div>
-            `).join(""));
+            slot.insertAdjacentHTML('beforeend', `
+                <div class="adcanvas-ad-label">${sanitize(labelText)}</div>
+                ${ads.map(ad => `
+                    <div class="adcanvas-sidebar-card">
+                        <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank">
+                            <div class="adcanvas-sidebar-image-wrapper">
+                                <img src="${sanitize(ad.merchantImageUrl)}"
+                                     alt="${sanitize(ad.productName)}"
+                                     loading="lazy"
+                                     decoding="async">
+                            </div>
+                            <div class="adcanvas-sidebar-title">${sanitize(ad.productName)}</div>
+                            <div class="adcanvas-sidebar-price">${sanitize(ad.displayPrice)}</div>
+                        </a>
+                    </div>
+                `).join("")}
+            `);
         },
 
         // -------------------------
@@ -601,23 +615,27 @@
          * // Renders large featured ad layout
          */
         hero(slot, ads) {
+            const labelText = slot.dataset.label || "Werbung";
             slot.textContent = '';
-            slot.insertAdjacentHTML('beforeend', ads.map(ad => `
-                <div class="adcanvas-hero-card">
-                    <a href="${sanitize(ad.awDeepLink)}" target="_blank" class="adcanvas-hero-link">
-                        <div class="adcanvas-hero-image-wrapper">
-                            <img src="${sanitize(ad.merchantImageUrl)}"
-                                 alt="${sanitize(ad.productName)}"
-                                 loading="lazy"
-                                 decoding="async">
-                        </div>
-                        <div class="adcanvas-hero-content">
-                            <div class="adcanvas-hero-title">${sanitize(ad.productName)}</div>
-                            <div class="adcanvas-hero-price">${sanitize(ad.displayPrice)}</div>
-                        </div>
-                    </a>
-                </div>
-            `).join(""));
+            slot.insertAdjacentHTML('beforeend', `
+                <div class="adcanvas-ad-label">${sanitize(labelText)}</div>
+                ${ads.map(ad => `
+                    <div class="adcanvas-hero-card">
+                        <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank" class="adcanvas-hero-link">
+                            <div class="adcanvas-hero-image-wrapper">
+                                <img src="${sanitize(ad.merchantImageUrl)}"
+                                     alt="${sanitize(ad.productName)}"
+                                     loading="lazy"
+                                     decoding="async">
+                            </div>
+                            <div class="adcanvas-hero-content">
+                                <div class="adcanvas-hero-title">${sanitize(ad.productName)}</div>
+                                <div class="adcanvas-hero-price">${sanitize(ad.displayPrice)}</div>
+                            </div>
+                        </a>
+                    </div>
+                `).join("")}
+            `);
         },
 
         // -------------------------
@@ -639,15 +657,18 @@
          */
         carousel(slot, ads) {
             const doubled = ads.concat(ads);
+            const labelText = slot.dataset.label || "Werbung";
 
             slot.textContent = '';
             slot.insertAdjacentHTML('beforeend', `
+                <div class="adcanvas-ad-label">${sanitize(labelText)}</div>
                 <div class="adcanvas-carousel" role="region" aria-label="Product carousel">
                     <button class="adcanvas-carousel-prev" aria-label="Previous product">&#10094;</button>
                     <div class="adcanvas-carousel-track" role="group">
                         ${doubled.map(ad => `
                             <div class="adcanvas-carousel-item" role="article">
                                 <a href="${sanitize(ad.awDeepLink)}" 
+                                   rel="sponsored"
                                    target="_blank"
                                    aria-label="${sanitize(ad.productName)} - ${sanitize(ad.displayPrice)}">
                                     <img src="${sanitize(ad.merchantImageUrl)}"
