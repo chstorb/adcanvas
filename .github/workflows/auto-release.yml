@@ -8,6 +8,8 @@ on:
 jobs:
   version-and-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
