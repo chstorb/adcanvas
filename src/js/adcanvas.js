@@ -19,13 +19,17 @@
 
     // -------- CONFIGURATION --------
     const CONFIG = {
-        // Feed URL - can be overridden via window.AdCanvasConfig.feedUrl
+        // Core configuration
         feedUrl: window.AdCanvasConfig.feedUrl || "https://chstorb.github.io/data.json",
+        enableDebug: window.AdCanvasConfig.enableDebug === true,
         
-        // Debug mode - enable detailed logging via window.AdCanvasConfig.enableDebug
-        enableDebug: window.AdCanvasConfig.enableDebug || false,
+        // DataSource logic (URL, transform, filter, sort, fallback)
+        dataSource: window.AdCanvasConfig.dataSource || {},
         
-        // Custom fallback support
+        // Template overrides per layout
+        templates: window.AdCanvasConfig.templates || {},
+        
+        // Custom fallback (legacy shortform)
         fallbackAds: Array.isArray(window.AdCanvasConfig.fallbackAds)
             ? window.AdCanvasConfig.fallbackAds
             : null,
@@ -90,27 +94,43 @@
      * // Returns fallback data if remote fetch fails
      */
     async function loadAds() {
-        const feedUrl = CONFIG.feedUrl;
+        const url = CONFIG.dataSource.url || CONFIG.feedUrl;
         
         try {
             if (CONFIG.enableDebug) {
-                console.debug("AdCanvas: Fetching from " + feedUrl);
+                console.debug("AdCanvas: Fetching from " + url);
             }
-            const response = await fetch(feedUrl, { cache: "no-store" });
+            const response = await fetch(url, { cache: "no-store" });
             
             if (!response.ok) {
                 throw new Error("HTTP " + response.status + ": " + response.statusText);
             }
             
-            const data = await response.json();
-            if (CONFIG.enableDebug) {
-                console.log("AdCanvas: Feed loaded successfully, " + data.length + " items");
+            let ads = await response.json();
+            
+            // Transform
+            if (typeof CONFIG.dataSource.transform === "function") {
+                ads = CONFIG.dataSource.transform(ads);
             }
-            return data;
+            
+            // Filter
+            if (typeof CONFIG.dataSource.filter === "function") {
+                ads = ads.filter(CONFIG.dataSource.filter);
+            }
+            
+            // Sort
+            if (typeof CONFIG.dataSource.sort === "function") {
+                ads = ads.sort(CONFIG.dataSource.sort);
+            }
+            
+            if (CONFIG.enableDebug) {
+                console.log("AdCanvas: Feed loaded successfully, " + ads.length + " items");
+            }
+            return ads;
             
         } catch (error) {
             console.warn(
-                "AdCanvas: Failed to load feed from " + feedUrl + "\n" +
+                "AdCanvas: Failed to load feed from " + url + "\n" +
                 "Error: " + error.message + "\n" +
                 "Using fallback data. Check network tab and CORS settings.",
                 error
@@ -124,7 +144,15 @@
      * @returns {Array<Object>} Fallback ads array
      */
     function getFallbackAds() {
-        // 1. Custom fallback provided?
+        // 1. DataSource-Fallback?
+        if (Array.isArray(CONFIG.dataSource.fallback) && CONFIG.dataSource.fallback.length > 0) {
+            if (CONFIG.enableDebug) {
+                console.debug("AdCanvas: Using dataSource.fallback (" + CONFIG.dataSource.fallback.length + " items)");
+            }
+            return CONFIG.dataSource.fallback;
+        }
+
+        // 2. Legacy custom fallback provided?
         if (Array.isArray(CONFIG.fallbackAds) && CONFIG.fallbackAds.length > 0) {
             if (CONFIG.enableDebug) {
                 console.debug(
@@ -136,7 +164,7 @@
             return CONFIG.fallbackAds;
         }
 
-        // 2. Otherwise: use built-in fallback
+        // 3. Otherwise: use built-in fallback
         if (CONFIG.enableDebug) {
             console.debug("AdCanvas: Using built-in fallbackAds");
         }
@@ -440,6 +468,77 @@
     // ----------------------------------------------------
     // 3. Layout-Renderer
     // ----------------------------------------------------
+    
+    /**
+     * Default templates for rendering per layout
+     */
+    const defaultTemplates = {
+        list: ad => `
+            <div class="adcanvas-ad-card">
+                <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank">
+                    <img src="${sanitize(ad.merchantImageUrl)}" alt="${sanitize(ad.productName)}" loading="lazy" decoding="async">
+                    <div class="adcanvas-ad-title">${sanitize(ad.productName)}</div>
+                    <div class="adcanvas-ad-price">${sanitize(ad.displayPrice)}</div>
+                </a>
+            </div>
+        `,
+        multiplex: ad => `
+            <div class="adcanvas-multiplex-item">
+                <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank">
+                    <img src="${sanitize(ad.merchantImageUrl)}" alt="${sanitize(ad.productName)}" loading="lazy" decoding="async">
+                    <div class="adcanvas-multiplex-title">${sanitize(ad.productName)}</div>
+                    <div class="adcanvas-multiplex-price">${sanitize(ad.displayPrice)}</div>
+                </a>
+            </div>
+        `,
+        infeed: ad => `
+            <div class="adcanvas-infeed-card">
+                <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank" class="adcanvas-infeed-link">
+                    <div class="adcanvas-infeed-image-wrapper">
+                        <img src="${sanitize(ad.merchantImageUrl)}" alt="${sanitize(ad.productName)}" loading="lazy" decoding="async">
+                    </div>
+                    <div class="adcanvas-infeed-content">
+                        <div class="adcanvas-infeed-title">${sanitize(ad.productName)}</div>
+                        <div class="adcanvas-infeed-price">${sanitize(ad.displayPrice)}</div>
+                    </div>
+                </a>
+            </div>
+        `,
+        sidebar: ad => `
+            <div class="adcanvas-sidebar-card">
+                <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank">
+                    <div class="adcanvas-sidebar-image-wrapper">
+                        <img src="${sanitize(ad.merchantImageUrl)}" alt="${sanitize(ad.productName)}" loading="lazy" decoding="async">
+                    </div>
+                    <div class="adcanvas-sidebar-title">${sanitize(ad.productName)}</div>
+                    <div class="adcanvas-sidebar-price">${sanitize(ad.displayPrice)}</div>
+                </a>
+            </div>
+        `,
+        hero: ad => `
+            <div class="adcanvas-hero-card">
+                <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank" class="adcanvas-hero-link">
+                    <div class="adcanvas-hero-image-wrapper">
+                        <img src="${sanitize(ad.merchantImageUrl)}" alt="${sanitize(ad.productName)}" loading="lazy" decoding="async">
+                    </div>
+                    <div class="adcanvas-hero-content">
+                        <div class="adcanvas-hero-title">${sanitize(ad.productName)}</div>
+                        <div class="adcanvas-hero-price">${sanitize(ad.displayPrice)}</div>
+                    </div>
+                </a>
+            </div>
+        `,
+        carousel: ad => `
+            <div class="adcanvas-carousel-item" role="article">
+                <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank" aria-label="${sanitize(ad.productName)} - ${sanitize(ad.displayPrice)}">
+                    <img src="${sanitize(ad.merchantImageUrl)}" alt="${sanitize(ad.productName)}" loading="lazy" decoding="async">
+                    <div class="adcanvas-carousel-title">${sanitize(ad.productName)}</div>
+                    <div class="adcanvas-carousel-price">${sanitize(ad.displayPrice)}</div>
+                </a>
+            </div>
+        `
+    };
+
     const layouts = {
         // -------------------------
         // LIST
@@ -460,21 +559,11 @@
          */
         list(slot, ads) {
             const labelText = slot.dataset.label || "Werbung";
+            const tpl = CONFIG.templates.list || defaultTemplates.list;
             slot.textContent = '';
             slot.insertAdjacentHTML('beforeend', `
                 <div class="adcanvas-ad-label">${sanitize(labelText)}</div>
-                ${ads.map(ad => `
-                    <div class="adcanvas-ad-card">
-                        <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank">
-                            <img src="${sanitize(ad.merchantImageUrl)}"
-                                 alt="${sanitize(ad.productName)}"
-                                 loading="lazy"
-                                 decoding="async">
-                            <div class="adcanvas-ad-title">${sanitize(ad.productName)}</div>
-                            <div class="adcanvas-ad-price">${sanitize(ad.displayPrice)}</div>
-                        </a>
-                    </div>
-                `).join("")}
+                ${ads.map(tpl).join("")}
             `);
         },
 
@@ -497,22 +586,12 @@
          */
         multiplex(slot, ads) {
             const labelText = slot.dataset.label || "Werbung";
+            const tpl = CONFIG.templates.multiplex || defaultTemplates.multiplex;
             slot.textContent = '';
             slot.insertAdjacentHTML('beforeend', `
                 <div class="adcanvas-ad-label">${sanitize(labelText)}</div>
                 <div class="adcanvas-multiplex-grid">
-                    ${ads.map(ad => `
-                        <div class="adcanvas-multiplex-item">
-                            <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank">
-                                <img src="${sanitize(ad.merchantImageUrl)}"
-                                     alt="${sanitize(ad.productName)}"
-                                     loading="lazy"
-                                     decoding="async">
-                                <div class="adcanvas-multiplex-title">${sanitize(ad.productName)}</div>
-                                <div class="adcanvas-multiplex-price">${sanitize(ad.displayPrice)}</div>
-                            </a>
-                        </div>
-                    `).join("")}
+                    ${ads.map(tpl).join("")}
                 </div>
             `);
         },
@@ -536,25 +615,11 @@
          */
         infeed(slot, ads) {
             const labelText = slot.dataset.label || "Werbung";
+            const tpl = CONFIG.templates.infeed || defaultTemplates.infeed;
             slot.textContent = '';
             slot.insertAdjacentHTML('beforeend', `
                 <div class="adcanvas-ad-label">${sanitize(labelText)}</div>
-                ${ads.map(ad => `
-                    <div class="adcanvas-infeed-card">
-                        <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank" class="adcanvas-infeed-link">
-                            <div class="adcanvas-infeed-image-wrapper">
-                                <img src="${sanitize(ad.merchantImageUrl)}"
-                                     alt="${sanitize(ad.productName)}"
-                                     loading="lazy"
-                                     decoding="async">
-                            </div>
-                            <div class="adcanvas-infeed-content">
-                                <div class="adcanvas-infeed-title">${sanitize(ad.productName)}</div>
-                                <div class="adcanvas-infeed-price">${sanitize(ad.displayPrice)}</div>
-                            </div>
-                        </a>
-                    </div>
-                `).join("")}
+                ${ads.map(tpl).join("")}
             `);
         },
 
@@ -577,23 +642,11 @@
          */
         sidebar(slot, ads) {
             const labelText = slot.dataset.label || "Werbung";
+            const tpl = CONFIG.templates.sidebar || defaultTemplates.sidebar;
             slot.textContent = '';
             slot.insertAdjacentHTML('beforeend', `
                 <div class="adcanvas-ad-label">${sanitize(labelText)}</div>
-                ${ads.map(ad => `
-                    <div class="adcanvas-sidebar-card">
-                        <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank">
-                            <div class="adcanvas-sidebar-image-wrapper">
-                                <img src="${sanitize(ad.merchantImageUrl)}"
-                                     alt="${sanitize(ad.productName)}"
-                                     loading="lazy"
-                                     decoding="async">
-                            </div>
-                            <div class="adcanvas-sidebar-title">${sanitize(ad.productName)}</div>
-                            <div class="adcanvas-sidebar-price">${sanitize(ad.displayPrice)}</div>
-                        </a>
-                    </div>
-                `).join("")}
+                ${ads.map(tpl).join("")}
             `);
         },
 
@@ -616,25 +669,11 @@
          */
         hero(slot, ads) {
             const labelText = slot.dataset.label || "Werbung";
+            const tpl = CONFIG.templates.hero || defaultTemplates.hero;
             slot.textContent = '';
             slot.insertAdjacentHTML('beforeend', `
                 <div class="adcanvas-ad-label">${sanitize(labelText)}</div>
-                ${ads.map(ad => `
-                    <div class="adcanvas-hero-card">
-                        <a href="${sanitize(ad.awDeepLink)}" rel="sponsored" target="_blank" class="adcanvas-hero-link">
-                            <div class="adcanvas-hero-image-wrapper">
-                                <img src="${sanitize(ad.merchantImageUrl)}"
-                                     alt="${sanitize(ad.productName)}"
-                                     loading="lazy"
-                                     decoding="async">
-                            </div>
-                            <div class="adcanvas-hero-content">
-                                <div class="adcanvas-hero-title">${sanitize(ad.productName)}</div>
-                                <div class="adcanvas-hero-price">${sanitize(ad.displayPrice)}</div>
-                            </div>
-                        </a>
-                    </div>
-                `).join("")}
+                ${ads.map(tpl).join("")}
             `);
         },
 
@@ -658,6 +697,7 @@
         carousel(slot, ads) {
             const doubled = ads.concat(ads);
             const labelText = slot.dataset.label || "Werbung";
+            const tpl = CONFIG.templates.carousel || defaultTemplates.carousel;
 
             slot.textContent = '';
             slot.insertAdjacentHTML('beforeend', `
@@ -665,21 +705,7 @@
                 <div class="adcanvas-carousel" role="region" aria-label="Product carousel">
                     <button class="adcanvas-carousel-prev" aria-label="Previous product">&#10094;</button>
                     <div class="adcanvas-carousel-track" role="group">
-                        ${doubled.map(ad => `
-                            <div class="adcanvas-carousel-item" role="article">
-                                <a href="${sanitize(ad.awDeepLink)}" 
-                                   rel="sponsored"
-                                   target="_blank"
-                                   aria-label="${sanitize(ad.productName)} - ${sanitize(ad.displayPrice)}">
-                                    <img src="${sanitize(ad.merchantImageUrl)}"
-                                         alt="${sanitize(ad.productName)}"
-                                         loading="lazy"
-                                         decoding="async">
-                                    <div class="adcanvas-carousel-title">${sanitize(ad.productName)}</div>
-                                    <div class="adcanvas-carousel-price">${sanitize(ad.displayPrice)}</div>
-                                </a>
-                            </div>
-                        `).join("")}
+                        ${doubled.map(tpl).join("")}
                     </div>
                     <button class="adcanvas-carousel-next" aria-label="Next product">&#10095;</button>
                 </div>
