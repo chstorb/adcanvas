@@ -34,7 +34,7 @@ Add to your HTML `<head>` section:
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/chstorb/adcanvas@latest/dist/adcanvas.min.css">
 
 <!-- JavaScript -->
-<script src="https://cdn.jsdelivr.net/gh/chstorb/adcanvas@latest/dist/adcanvas.min.js" defer></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/chstorb/adcanvas@latest/dist/adcanvas.min.js" defer></script>
 ```
 
 ### Local / Self-Hosted
@@ -60,7 +60,7 @@ cp dist/adcanvas.min.css your-project/
 
 ```html
 <link rel="stylesheet" href="/path/to/adcanvas.min.css">
-<script src="/path/to/adcanvas.min.js" defer></script>
+<script type="module" src="/path/to/adcanvas.min.js" defer></script>
 ```
 
 ### TypeScript Support
@@ -255,16 +255,24 @@ Check browser console for detailed messages.
 
 ### Configuration (Advanced)
 
-You can override the default feed URL before loading the script:
+You can override the default feed URL and provide custom **Fallback Ads** before loading the script:
 
 ```html
 <script>
 window.AdCanvasConfig = {
   feedUrl: "https://your-server.com/ads.json",
-  enableDebug: false  // Set to true for detailed console logs
+  enableDebug: false, // Set to true for detailed console logs
+  fallbackAds: [
+      {
+        awDeepLink: "https://example.com/product",
+        productName: "Featured Demo Product",
+        merchantImageUrl: "https://example.com/demo.jpg",
+        displayPrice: "EUR99"
+      }
+  ]
 };
 </script>
-<script src="https://cdn.jsdelivr.net/gh/chstorb/adcanvas@latest/dist/adcanvas.min.js" defer></script>
+<script type="module" src="https://cdn.jsdelivr.net/gh/chstorb/adcanvas@latest/dist/adcanvas.min.js" defer></script>
 ```
 
 ### JavaScript API

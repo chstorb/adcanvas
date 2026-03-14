@@ -1,4 +1,5 @@
 /*!
+ * // path: src/js/adcanvas.js
  * AdCanvas
  * Lightweight, framework‑agnostic ad rendering engine.
  * https://chstorb.github.io
@@ -8,10 +9,8 @@
  * License: MIT
  * Version: 1.0.0
  */
-(function () {
-    "use strict";
 
-    // -------- GLOBAL CONFIGURATION (can be overridden before script load) --------
+// -------- GLOBAL CONFIGURATION (can be overridden before script load) --------
     // Allow users to set custom configuration before the script loads:
     // <script>
     //   window.AdCanvasConfig = { feedUrl: "https://your-api.com/ads.json" };
@@ -26,6 +25,11 @@
         // Debug mode - enable detailed logging via window.AdCanvasConfig.enableDebug
         enableDebug: window.AdCanvasConfig.enableDebug || false,
         
+        // Custom fallback support
+        fallbackAds: Array.isArray(window.AdCanvasConfig.fallbackAds)
+            ? window.AdCanvasConfig.fallbackAds
+            : null,
+            
         // Carousel item width = minWidth (200px) + margin-right (12px)
         // MUST match CSS: .adcanvas-carousel-item { min-width: 200px; margin-right: 12px; }
         CAROUSEL_ITEM_WIDTH: 212,
@@ -120,6 +124,23 @@
      * @returns {Array<Object>} Fallback ads array
      */
     function getFallbackAds() {
+        // 1. Custom fallback provided?
+        if (Array.isArray(CONFIG.fallbackAds) && CONFIG.fallbackAds.length > 0) {
+            if (CONFIG.enableDebug) {
+                console.debug(
+                    "AdCanvas: Using custom fallbackAds (" +
+                    CONFIG.fallbackAds.length +
+                    " items)"
+                );
+            }
+            return CONFIG.fallbackAds;
+        }
+
+        // 2. Otherwise: use built-in fallback
+        if (CONFIG.enableDebug) {
+            console.debug("AdCanvas: Using built-in fallbackAds");
+        }
+
         return [
             {
                 awDeepLink:
@@ -431,14 +452,15 @@
          * 
          * @param {HTMLElement} slot - The ad slot DOM element
          * @param {Array<Object>} ads - Array of validated ad objects
-         * @returns {void} Modifies slot.innerHTML
+         * @returns {void} Modifies DOM element safely
          * 
          * @example
          * layouts.list(slot, adArray);
          * // Renders vertical card list
          */
         list(slot, ads) {
-            slot.innerHTML = ads.map(ad => `
+            slot.textContent = '';
+            slot.insertAdjacentHTML('beforeend', ads.map(ad => `
                 <div class="adcanvas-ad-card">
                     <a href="${sanitize(ad.awDeepLink)}" target="_blank">
                         <img src="${sanitize(ad.merchantImageUrl)}"
@@ -449,7 +471,7 @@
                         <div class="adcanvas-ad-price">${sanitize(ad.displayPrice)}</div>
                     </a>
                 </div>
-            `).join("");
+            `).join(""));
         },
 
         // -------------------------
@@ -463,14 +485,15 @@
          * 
          * @param {HTMLElement} slot - The ad slot DOM element
          * @param {Array<Object>} ads - Array of validated ad objects
-         * @returns {void} Modifies slot.innerHTML
+         * @returns {void} Modifies DOM element safely
          * 
          * @example
          * layouts.multiplex(slot, adArray);
          * // Renders responsive grid layout
          */
         multiplex(slot, ads) {
-            slot.innerHTML = `
+            slot.textContent = '';
+            slot.insertAdjacentHTML('beforeend', `
                 <div class="adcanvas-multiplex-grid">
                     ${ads.map(ad => `
                         <div class="adcanvas-multiplex-item">
@@ -485,7 +508,7 @@
                         </div>
                     `).join("")}
                 </div>
-            `;
+            `);
         },
 
         // -------------------------
@@ -499,14 +522,15 @@
          * 
          * @param {HTMLElement} slot - The ad slot DOM element
          * @param {Array<Object>} ads - Array of validated ad objects
-         * @returns {void} Modifies slot.innerHTML
+         * @returns {void} Modifies DOM element safely
          * 
          * @example
          * layouts.infeed(slot, adArray);
          * // Renders horizontal card layout
          */
         infeed(slot, ads) {
-            slot.innerHTML = ads.map(ad => `
+            slot.textContent = '';
+            slot.insertAdjacentHTML('beforeend', ads.map(ad => `
                 <div class="adcanvas-infeed-card">
                     <a href="${sanitize(ad.awDeepLink)}" target="_blank" class="adcanvas-infeed-link">
                         <div class="adcanvas-infeed-image-wrapper">
@@ -521,7 +545,7 @@
                         </div>
                     </a>
                 </div>
-            `).join("");
+            `).join(""));
         },
 
         // -------------------------
@@ -535,14 +559,15 @@
          * 
          * @param {HTMLElement} slot - The ad slot DOM element
          * @param {Array<Object>} ads - Array of validated ad objects
-         * @returns {void} Modifies slot.innerHTML
+         * @returns {void} Modifies DOM element safely
          * 
          * @example
          * layouts.sidebar(slot, adArray);
          * // Renders centered sidebar card layout
          */
         sidebar(slot, ads) {
-            slot.innerHTML = ads.map(ad => `
+            slot.textContent = '';
+            slot.insertAdjacentHTML('beforeend', ads.map(ad => `
                 <div class="adcanvas-sidebar-card">
                     <a href="${sanitize(ad.awDeepLink)}" target="_blank">
                         <div class="adcanvas-sidebar-image-wrapper">
@@ -555,7 +580,7 @@
                         <div class="adcanvas-sidebar-price">${sanitize(ad.displayPrice)}</div>
                     </a>
                 </div>
-            `).join("");
+            `).join(""));
         },
 
         // -------------------------
@@ -569,14 +594,15 @@
          * 
          * @param {HTMLElement} slot - The ad slot DOM element
          * @param {Array<Object>} ads - Array of validated ad objects
-         * @returns {void} Modifies slot.innerHTML
+         * @returns {void} Modifies DOM element safely
          * 
          * @example
          * layouts.hero(slot, adArray);
          * // Renders large featured ad layout
          */
         hero(slot, ads) {
-            slot.innerHTML = ads.map(ad => `
+            slot.textContent = '';
+            slot.insertAdjacentHTML('beforeend', ads.map(ad => `
                 <div class="adcanvas-hero-card">
                     <a href="${sanitize(ad.awDeepLink)}" target="_blank" class="adcanvas-hero-link">
                         <div class="adcanvas-hero-image-wrapper">
@@ -591,7 +617,7 @@
                         </div>
                     </a>
                 </div>
-            `).join("");
+            `).join(""));
         },
 
         // -------------------------
@@ -605,7 +631,7 @@
          * 
          * @param {HTMLElement} slot - The ad slot DOM element
          * @param {Array<Object>} ads - Array of validated ad objects
-         * @returns {void} Modifies slot.innerHTML and adds event listeners
+         * @returns {void} Modifies DOM element safely and adds event listeners
          * 
          * @example
          * layouts.carousel(slot, adArray);
@@ -614,7 +640,8 @@
         carousel(slot, ads) {
             const doubled = ads.concat(ads);
 
-            slot.innerHTML = `
+            slot.textContent = '';
+            slot.insertAdjacentHTML('beforeend', `
                 <div class="adcanvas-carousel" role="region" aria-label="Product carousel">
                     <button class="adcanvas-carousel-prev" aria-label="Previous product">&#10094;</button>
                     <div class="adcanvas-carousel-track" role="group">
@@ -635,7 +662,7 @@
                     </div>
                     <button class="adcanvas-carousel-next" aria-label="Next product">&#10095;</button>
                 </div>
-            `;
+            `);
 
             const track = slot.querySelector(".adcanvas-carousel-track");
             const prev = slot.querySelector(".adcanvas-carousel-prev");
@@ -805,4 +832,6 @@
     } else {
         init();
     }
-})();
+    
+    // Export functionality for ESM use
+    export { init, loadAds, validateAd };
