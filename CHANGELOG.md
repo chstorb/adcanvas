@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Carousel navigation arrows invisible in custom themes: introduced dedicated `--adcanvas-btn-bg`, `--adcanvas-btn-color`, `--adcanvas-btn-border` variables, decoupled from card color tokens
+
+## [1.1.0] - 2026-03-18
+
+### Added
+- **CSS Variables (Design API):** Introduced `:root`-scoped `--adcanvas-*` custom properties for colors, spacing, radii, shadows, and image heights
+- Full documentation of Design API variables in README.md
+- Custom Theme example in demo page (`docs/demo/index.html`)
+
+### Changed
+- All 6 layouts (list, multiplex, infeed, sidebar, hero, carousel) now use CSS variables instead of hardcoded values
+- Themes (light, dark, premium) refactored to override variables only — no longer override per-element class properties
+- Carousel button hover now uses `filter: brightness(0.9)` for theme-aware hover effect
+- Bumped version to `1.1.0` in `adcanvas.css` header
+
+## [1.0.1] - 2026-03-06 (Patch)
+
 ### Added
 - Improved error handling with detailed logging
 - Data validation to prevent XSS injection

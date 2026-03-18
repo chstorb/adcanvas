@@ -7,7 +7,7 @@
  *
  * Author: Christian Storb
  * License: MIT
- * Version: 1.0.0
+ * Version: 1.1.0
  */
 
 // -------- GLOBAL CONFIGURATION (can be overridden before script load) --------
@@ -724,7 +724,14 @@
                 return;
             }
 
-            const itemWidth = CONFIG.CAROUSEL_ITEM_WIDTH; // 200 (min-width) + 12 (margin-right)
+            const itemWidth = (() => {
+                const firstItem = track.querySelector('.adcanvas-carousel-item');
+                if (firstItem) {
+                    const margin = parseInt(getComputedStyle(firstItem).marginRight, 10) || 0;
+                    return firstItem.offsetWidth + margin;
+                }
+                return CONFIG.CAROUSEL_ITEM_WIDTH; // fallback
+            })();
             const totalItems = doubled.length;
             const half = totalItems / 2;
 

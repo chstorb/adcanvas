@@ -6,6 +6,7 @@
 [![Build Status](https://img.shields.io/github/actions/workflow/status/chstorb/adcanvas/auto-release.yml?branch=main&style=flat-square)](https://github.com/chstorb/adcanvas/actions)
 [![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)](https://github.com/chstorb/adcanvas)
 [![Engine](https://img.shields.io/badge/engine-javascript-yellow?style=flat-square)](src/js/adcanvas.js)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue?style=flat-square)](CHANGELOG.md)
 
 A lightweight, zero-dependency ad display engine for modern web applications. Renders customizable ads with multiple layout options, theme support, and automatic fallback mechanisms.
 
@@ -16,6 +17,7 @@ A lightweight, zero-dependency ad display engine for modern web applications. Re
 - **Zero Dependencies** – Pure vanilla JavaScript, no frameworks or libraries required
 - **6 Responsive Layouts** – list, multiplex, in-feed, sidebar, hero, carousel
 - **3 Themes** – light (default), dark, and premium color schemes
+- **🆕 CSS Variables (Design API)** – Fully customizable tokens for colors, spacing, radii, and image heights
 - **Touch-Friendly Carousel** – Auto-play, swipe gestures, responsive buttons
 - **Offline-Ready** – Fallback data for when feed is unavailable
 - **Developer-Friendly** – Simple HTML attributes, auto-initialize, no config needed
@@ -172,6 +174,58 @@ Apply color schemes via the `data-theme` attribute:
 <!-- Premium theme -->
 <div class="adcanvas-ad-slot" data-theme="premium"></div>
 ```
+
+## 🎨 Design API – CSS Variables
+
+AdCanvas 1.1 introduces a **CSS Variable system** (Design API) for deep, update-safe customization. All visual tokens are defined in `:root` and can be overridden globally, per-theme, or per-slot.
+
+### Available Variables
+
+| Category | Variable | Default | Description |
+|----------|----------|---------|-------------|
+| Colors | `--adcanvas-bg` | `#fff` | Background color |
+| | `--adcanvas-text` | `#222` | Text color |
+| | `--adcanvas-border` | `#ddd` | Border color |
+| | `--adcanvas-price` | `#008000` | Price highlight color |
+| Radii | `--adcanvas-radius-sm` | `4px` | Small corner radius |
+| | `--adcanvas-radius-md` | `6px` | Medium corner radius |
+| | `--adcanvas-radius-lg` | `10px` | Large corner radius |
+| Shadows | `--adcanvas-shadow` | `0 4px 12px rgba(0,0,0,0.12)` | Card shadow |
+| Spacing | `--adcanvas-spacing-xs` | `4px` | Extra-small spacing |
+| | `--adcanvas-spacing-sm` | `8px` | Small spacing |
+| | `--adcanvas-spacing-md` | `12px` | Medium spacing |
+| | `--adcanvas-spacing-lg` | `16px` | Large spacing |
+| Image Heights | `--adcanvas-img-list` | `160px` | List layout image height |
+| | `--adcanvas-img-multiplex` | `120px` | Multiplex layout |
+| | `--adcanvas-img-sidebar` | `140px` | Sidebar layout |
+| | `--adcanvas-img-hero` | `240px` | Hero layout |
+| | `--adcanvas-img-carousel` | `120px` | Carousel layout |
+| Nav Buttons | `--adcanvas-btn-bg` | `#fff` | Button background (decoupled from card bg) |
+| | `--adcanvas-btn-color` | `#333` | Arrow/icon color |
+| | `--adcanvas-btn-border` | `#ccc` | Button border color |
+
+### Creating a Custom Theme
+
+Define a CSS class that overrides only the variables you want:
+
+```css
+/* path: your-styles.css */
+.my-brand-theme {
+    --adcanvas-bg: #e1f5fe;
+    --adcanvas-text: #01579b;
+    --adcanvas-border: #4fc3f7;
+    --adcanvas-radius-md: 16px;
+    --adcanvas-img-list: 200px;
+}
+```
+
+Apply it directly to your slot:
+
+```html
+<div class="adcanvas-ad-slot my-brand-theme" data-layout="list" data-count="3"></div>
+```
+
+> No forking of the source CSS required. Your customizations are update-safe and isolated.
 
 ## ⚙️ API Reference
 
