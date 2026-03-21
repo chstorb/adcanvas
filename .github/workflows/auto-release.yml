@@ -77,6 +77,19 @@ jobs:
         run: cp src/css/adcanvas.css dist/adcanvas.css
 
       # -------------------------------------------------------
+      # 3b) dist/ in den Commit aufnehmen (für jsDelivr notwendig)
+      # -------------------------------------------------------
+      - name: Commit dist files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add dist/
+          # Nur committen, wenn es Änderungen gibt
+          if ! git diff --cached --quiet; then
+            git commit -m "Add dist files for release ${{ steps.version.outputs.next }}"
+          fi
+
+      # -------------------------------------------------------
       # 4) Git-Tag erstellen
       # -------------------------------------------------------
       - name: Create Git Tag
