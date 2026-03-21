@@ -96,8 +96,8 @@ jobs:
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
-          git tag ${{ steps.version.outputs.next }}
-          git push origin ${{ steps.version.outputs.next }}
+          git tag v${{ steps.version.outputs.next }}
+          git push origin v${{ steps.version.outputs.next }}
 
       # -------------------------------------------------------
       # 5) Release erzeugen
@@ -105,8 +105,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ steps.version.outputs.next }}
-          name: Release ${{ steps.version.outputs.next }}
+          tag_name: v${{ steps.version.outputs.next }}
+          name: Release v${{ steps.version.outputs.next }}
           files: |
             dist/adcanvas.js
             dist/adcanvas.min.js
