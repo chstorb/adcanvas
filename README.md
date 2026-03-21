@@ -17,11 +17,12 @@ A lightweight, zero-dependency ad display engine for modern web applications. Re
 - **Zero Dependencies** – Pure vanilla JavaScript, no frameworks or libraries required
 - **6 Responsive Layouts** – list, multiplex, in-feed, sidebar, hero, carousel
 - **3 Themes** – light (default), dark, and premium color schemes
-- **🆕 CSS Variables (Design API)** – Fully customizable tokens for colors, spacing, radii, and image heights
+- **🆕 Design API (CSS Variables)** – Fully customizable tokens for colors, spacing, and more
+- **🆕 DataSource Architecture** – Configurable data loading with transform, filter, and sort logic
+- **🆕 Custom Templates** – Override any layout template with your own HTML/logic
 - **Touch-Friendly Carousel** – Auto-play, swipe gestures, responsive buttons
-- **Offline-Ready** – Fallback data for when feed is unavailable
+- **Offline-Ready** – Multi-layer fallback data system
 - **Developer-Friendly** – Simple HTML attributes, auto-initialize, no config needed
-- **CDN-Ready** – Available via jsDelivr and UNPKG
 - **Accessible** – Keyboard navigation, ARIA labels, semantic HTML
 - **Production-Ready** – XSS-safe sanitization, input validation, error handling
 
@@ -227,7 +228,74 @@ Apply it directly to your slot:
 
 > No forking of the source CSS required. Your customizations are update-safe and isolated.
 
-## ⚙️ API Reference
+## ⚙️ DataSource & Template Architecture
+
+AdCanvas 1.1 features a powerful, modular architecture for data management and rendering, inspired by professional UI frameworks.
+
+### 🧩 DataSource Configuration
+
+The `dataSource` object allows you to control how ads are fetched, processed, and displayed.
+
+```javascript
+window.AdCanvasConfig = {
+  dataSource: {
+    url: "https://example.com/api/ads.json",
+
+    // Optional: Custom fallback data if the fetch fails
+    fallback: [
+      { productName: "Backup Ad 1", displayPrice: "EUR 99", ... }
+    ],
+
+    // Optional: Transform raw data into the expected format
+    transform: (data) => data.map(item => ({
+      ...item,
+      productName: item.title.toUpperCase()
+    })),
+
+    // Optional: Filter ads based on custom logic
+    filter: (ad) => ad.stock > 0 && ad.currency === "EUR",
+
+    // Optional: Sort ads (e.g., by price)
+    sort: (a, b) => parseFloat(a.searchPrice) - parseFloat(b.searchPrice)
+  }
+};
+```
+
+### 🎨 Custom Templates
+
+You can override the default HTML for any layout. This allows for total control over the visual presentation while keeping the core engine logic.
+
+```javascript
+window.AdCanvasConfig = {
+  templates: {
+    // Override the "list" layout template
+    list: (ad) => `
+      <div class="my-custom-card">
+        <a href="${ad.awDeepLink}" rel="sponsored" target="_blank">
+          <img src="${ad.merchantImageUrl}" alt="${ad.productName}">
+          <h3>${ad.productName}</h3>
+          <p class="price">${ad.displayPrice}</p>
+        </a>
+      </div>
+    `,
+
+    // Override the "hero" layout template
+    hero: (ad) => `
+      <div class="my-custom-hero">
+        <h2>${ad.productName}</h2>
+        <p>Special Offer: ${ad.displayPrice}</p>
+        <button onclick="window.open('${ad.awDeepLink}')">Shop Now</button>
+      </div>
+    `
+  }
+};
+```
+
+> [!TIP]
+> Use the `sanitize()` helper (if available in your scope) or ensure you are not rendering untrusted HTML to prevent XSS attacks.
+
+---
+
 
 ### HTML Attributes on `.adcanvas-ad-slot`
 
@@ -310,19 +378,31 @@ Check browser console for detailed messages.
 
 ### Configuration (Advanced)
 
-You can override the default feed URL and provide custom **Fallback Ads** before loading the script:
+You can override the default feed URL, provide custom **Fallback Ads**, and configure the **DataSource** or **Templates** before loading the script:
 
 ```html
 <script>
 window.AdCanvasConfig = {
   feedUrl: "https://your-server.com/ads.json",
-  enableDebug: false, // Set to true for detailed console logs
+  enableDebug: false,
+  
+  // New: DataSource configuration
+  dataSource: {
+    filter: (ad) => ad.currency === "EUR",
+    sort: (a, b) => b.searchPrice - a.searchPrice
+  },
+
+  // New: Template overrides
+  templates: {
+    hero: (ad) => `<div class="hero-ad">${ad.productName}</div>`
+  },
+
   fallbackAds: [
       {
         awDeepLink: "https://example.com/product",
         productName: "Featured Demo Product",
         merchantImageUrl: "https://example.com/demo.jpg",
-        displayPrice: "EUR99"
+        displayPrice: "EUR 99"
       }
   ]
 };
