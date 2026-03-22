@@ -1,3 +1,4 @@
+# [1.0.0](https://github.com/chstorb/adcanvas/compare/v1.1.1...v1.0.0) (2026-03-22)
 # Changelog
 
 All notable changes to this project will be documented in this file.
