@@ -525,11 +525,64 @@ The GitHub Actions workflow runs automatically on push to main:
 
 We welcome contributions! Here's how to get started:
 
-1. **Fork** the repository
-2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
-3. **Commit** your changes: `git commit -m 'Add amazing feature'`
-4. **Push** to the branch: `git push origin feature/amazing-feature`
-5. **Open** a Pull Request
+1. Fork the repository  
+2. Create a feature branch:  
+   ```
+   git checkout -b feature/amazing-feature
+   ```
+3. Commit your changes using the required commit conventions:  
+   ```
+   feat: add amazing feature
+   ```
+   See the section **Commit Conventions (for Automated Releases)** below.
+4. Push your branch:  
+   ```
+   git push origin feature/amazing-feature
+   ```
+5. Open a Pull Request
+
+### 📝 Commit Conventions (for Automated Releases)
+
+AdCanvas uses an automated release workflow.  
+To ensure correct versioning, changelog generation, and release notes, all commits should follow these conventions:
+
+#### Feature Commits
+```
+feat: short description of the new feature
+```
+Triggers a **minor version** bump (e.g., 1.2.0 → 1.3.0).
+
+#### Bug Fixes
+```
+fix: short description of the fix
+```
+Triggers a **patch version** bump (e.g., 1.2.0 → 1.2.1).
+
+#### Breaking Changes
+```
+feat!: short description of the breaking change
+```
+or in the commit body:
+```
+BREAKING CHANGE: explanation
+```
+Triggers a **major version** bump (e.g., 1.2.0 → 2.0.0).
+
+#### Other Commit Types
+```
+docs: ...
+chore: ...
+refactor: ...
+style: ...
+test: ...
+```
+These do **not** affect versioning but are included in the generated changelog.
+
+#### Why This Matters
+- Versions are determined automatically from commit messages  
+- Release notes are generated automatically  
+- `CHANGELOG.md` stays up to date  
+- Releases remain consistent and jsDelivr‑compatible  
 
 ### Code Guidelines
 

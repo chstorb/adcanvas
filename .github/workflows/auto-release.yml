@@ -1,4 +1,4 @@
-name: Auto Version & Release
+name: Auto Version & Release (Pro)
 
 on:
   push:
@@ -12,6 +12,9 @@ jobs:
       contents: write
 
     steps:
+      # -------------------------------------------------------
+      # 0) Checkout
+      # -------------------------------------------------------
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -22,47 +25,48 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install tools
+      # -------------------------------------------------------
+      # 1) Tools deterministisch installieren
+      # -------------------------------------------------------
+      - name: Install dependencies
         run: |
-          npm install -g semver terser clean-css-cli
+          npm init -y
+          npm install semver@7 terser@5 clean-css-cli@5 conventional-changelog-cli@5
 
       # -------------------------------------------------------
-      # 1) Version automatisch bestimmen
+      # 2) Version automatisch bestimmen (semantisch korrekt)
       # -------------------------------------------------------
       - name: Determine next version
         id: version
         run: |
-          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          LAST_TAG=$(git tag --sort=-v:refname | head -n 1)
+          if [ -z "$LAST_TAG" ]; then LAST_TAG="v0.0.0"; fi
+
           COMMITS=$(git log ${LAST_TAG}..HEAD --pretty=format:"%s")
 
-          MAJOR=0
-          MINOR=0
-          PATCH=0
-
           if echo "$COMMITS" | grep -qi "BREAKING CHANGE"; then
-            MAJOR=1
+            BUMP="major"
           elif echo "$COMMITS" | grep -qi "^feat"; then
-            MINOR=1
+            BUMP="minor"
           else
-            PATCH=1
+            BUMP="patch"
           fi
 
-          NEXT=$(semver -i $( [ $MAJOR -eq 1 ] && echo major || ( [ $MINOR -eq 1 ] && echo minor || echo patch ) ) $LAST_TAG)
-
+          NEXT=$(npx semver -i $BUMP $LAST_TAG)
           echo "next=$NEXT" >> $GITHUB_OUTPUT
 
       # -------------------------------------------------------
-      # 2) Build vorbereiten (dist-Ordner erstellen)
+      # 3) dist/ neu erzeugen
       # -------------------------------------------------------
-      - name: Ensure dist folder exists
-        run: mkdir -p dist
+      - name: Prepare dist folder
+        run: rm -rf dist && mkdir dist
 
       # -------------------------------------------------------
-      # 3) JS/CSS minifizieren
+      # 4) Build (JS + CSS)
       # -------------------------------------------------------
       - name: Minify JavaScript
         run: |
-          terser src/js/adcanvas.js \
+          npx terser src/js/adcanvas.js \
             --compress --mangle \
             --output dist/adcanvas.min.js
 
@@ -71,42 +75,76 @@ jobs:
 
       - name: Minify CSS
         run: |
-          cleancss -o dist/adcanvas.min.css src/css/adcanvas.css
+          npx cleancss -o dist/adcanvas.min.css src/css/adcanvas.css
 
       - name: Copy unminified CSS
         run: cp src/css/adcanvas.css dist/adcanvas.css
 
       # -------------------------------------------------------
-      # 3b) dist/ in den Commit aufnehmen (für jsDelivr notwendig)
+      # 5) Build validieren
+      # -------------------------------------------------------
+      - name: Validate build
+        run: |
+          test -f dist/adcanvas.min.js || (echo "Build failed: JS missing" && exit 1)
+          test -f dist/adcanvas.min.css || (echo "Build failed: CSS missing" && exit 1)
+
+      # -------------------------------------------------------
+      # 6) dist committen (nur bei Änderungen)
       # -------------------------------------------------------
       - name: Commit dist files
+        id: commitdist
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add dist/
-          # Nur committen, wenn es Änderungen gibt
-          if ! git diff --cached --quiet; then
-            git commit -m "Add dist files for release ${{ steps.version.outputs.next }}"
+          if git diff --cached --quiet; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            git commit -m "Build dist for release ${{ steps.version.outputs.next }}"
+            echo "changed=true" >> $GITHUB_OUTPUT
           fi
 
       # -------------------------------------------------------
-      # 4) Git-Tag erstellen
+      # 7) Changelog generieren (nur wenn Änderungen existieren)
+      # -------------------------------------------------------
+      - name: Generate changelog
+        if: steps.commitdist.outputs.changed == 'true'
+        run: |
+          npx conventional-changelog -p angular -i CHANGELOG.md -s
+          git add CHANGELOG.md
+          git commit -m "Update changelog for v${{ steps.version.outputs.next }}"
+
+      # -------------------------------------------------------
+      # 8) Tag erstellen (nur wenn Änderungen existieren)
       # -------------------------------------------------------
       - name: Create Git Tag
+        if: steps.commitdist.outputs.changed == 'true'
         run: |
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
           git tag v${{ steps.version.outputs.next }}
           git push origin v${{ steps.version.outputs.next }}
 
       # -------------------------------------------------------
-      # 5) Release erzeugen
+      # 9) Release Notes automatisch generieren
+      # -------------------------------------------------------
+      - name: Generate release notes
+        if: steps.commitdist.outputs.changed == 'true'
+        id: notes
+        run: |
+          NOTES=$(npx conventional-changelog -p angular -r 1)
+          echo "notes<<EOF" >> $GITHUB_OUTPUT
+          echo "$NOTES" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      # -------------------------------------------------------
+      # 10) GitHub Release erstellen
       # -------------------------------------------------------
       - name: Create GitHub Release
+        if: steps.commitdist.outputs.changed == 'true'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v${{ steps.version.outputs.next }}
           name: Release v${{ steps.version.outputs.next }}
+          body: ${{ steps.notes.outputs.notes }}
           files: |
             dist/adcanvas.js
             dist/adcanvas.min.js
