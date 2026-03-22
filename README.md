@@ -10,7 +10,7 @@
 
 A lightweight, zero-dependency ad display engine for modern web applications. Renders customizable ads with multiple layout options, theme support, and automatic fallback mechanisms.
 
-**[📍 Live Demo](https://chstorb.github.io/adcanvas/docs/demo/)** | **[🔗 Repository](https://github.com/chstorb/adcanvas)** | **[📄 License](LICENSE)**
+**[📍 Live Demo](https://codepen.io/editor/chstorb/pen/019d15fb-6659-7aa0-a61b-00233f8df247)** | **[🔗 Repository](https://github.com/chstorb/adcanvas)** | **[📄 License](LICENSE)**
 
 ## 🚀 Features
 
@@ -77,6 +77,14 @@ import type { AdCanvasAd, AdCanvasAdSlot } from 'adcanvas';
 See [dist/adcanvas.d.ts](dist/adcanvas.d.ts) for full type definitions.
 
 ## 🎯 Quick Start
+
+### 🔥 Live Demo (CodePen)
+
+If you want to try AdCanvas instantly without setting up a project, you can use the interactive CodePen demo:
+
+👉 https://codepen.io/editor/chstorb/pen/019d15fb-6659-7aa0-a61b-00233f8df247
+
+This demo shows the basic initialization and rendering flow and is ideal for quick experimentation.
 
 ### Basic Usage
 
