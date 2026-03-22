@@ -6,7 +6,7 @@
 [![Build Status](https://img.shields.io/github/actions/workflow/status/chstorb/adcanvas/auto-release.yml?branch=main&style=flat-square)](https://github.com/chstorb/adcanvas/actions)
 [![Status](https://img.shields.io/badge/status-active-brightgreen?style=flat-square)](https://github.com/chstorb/adcanvas)
 [![Engine](https://img.shields.io/badge/engine-javascript-yellow?style=flat-square)](src/js/adcanvas.js)
-[![Version](https://img.shields.io/badge/version-1.1.0-blue?style=flat-square)](CHANGELOG.md)
+[![Version](https://img.shields.io/github/v/release/chstorb/adcanvas?style=flat-square)](CHANGELOG.md)
 
 A lightweight, zero-dependency ad display engine for modern web applications. Renders customizable ads with multiple layout options, theme support, and automatic fallback mechanisms.
 
